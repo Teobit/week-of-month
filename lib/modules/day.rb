@@ -15,9 +15,9 @@ module WeekOfMonth
     #        31]
     # @return [Array]
     def days_array
-      day = self.beginning_of_month.to_date.wday
+      day = self.beginning_of_month.to_date.cwday
       array = []
-      array[day] = 1
+      array[day-1] = 1
       (2..self.end_of_month.mday).each {|i| array << i }
       array
     end
@@ -28,7 +28,7 @@ module WeekOfMonth
     def name_of_week_day
       self.class.new(year,month,day).strftime('%A')
     end
-      
+
     # this code generates method names like 'upcomong_monday' and 'previous_monday'
     # Date.new(2013,1,1).upcoming_monday
     # => #<Date: 2013-01-07 ((2456300j,0s,0n),+0s,2299161j)>
@@ -42,23 +42,23 @@ module WeekOfMonth
           date = eval "self"
           if date.send(check)
             if date.class == Date
-              date = date.send(value,7) 
+              date = date.send(value,7)
             elsif date.class == Time
               date = date.send(value,(60 * 60 * 24 * 7))
             end
-           else
-             until date.send(check)
-               if date.class == Date
-                 date = date.send(value,1) 
-               elsif date.class == Time
-                 date = date.send(value,(60 * 60 * 24))
-               end
-             end
-           end
-           date
+          else
+            until date.send(check)
+              if date.class == Date
+                date = date.send(value,1)
+              elsif date.class == Time
+                date = date.send(value,(60 * 60 * 24))
+              end
+            end
+          end
+          date
         end
       end
     end
-   
+
   end
 end
